@@ -9,8 +9,8 @@ install_packages() {
   # python dependency packages
   if [[ -f /etc/debian_version ]] || [[ -f /etc/lsb_release ]]; then
     PKG_MANAGER="apt-get"
-    PKG_MANAGER_OPTIONS="-y --no-install-recommends"
-    PACKAGES="python-dev python-setuptools python-pip gcc libssl-dev libffi-dev"
+    PKG_MANAGER_OPTIONS="-y --force-yes --no-install-recommends"
+    PACKAGES="python-dev python-setuptools python-pip gcc libssl-dev libffi-dev apt-transport-https"
     echo "* running apt-get update"
     $SUDO_CMD apt-get update
     echo "  done."
