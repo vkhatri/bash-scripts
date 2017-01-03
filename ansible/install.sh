@@ -62,7 +62,7 @@ install_virtualenv() {
 setup_venv() {
   # setup venv
   if ! ls -l $VENV_ACTIVATE_CMD 2>1 > /dev/null; then
-    if virtualenv --python=python2 "$ANSIBLE_VENV_DIR"; then
+    if virtualenv --python=python2 --system-site-packages "$ANSIBLE_VENV_DIR"; then
       echo "* created python virtual environment for ansible at location $ANSIBLE_VENV_DIR"
     else
       echo "* failed to create python virtual environment for ansible at location $ANSIBLE_VENV_DIR"
