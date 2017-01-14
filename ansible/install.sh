@@ -135,6 +135,23 @@ install_ansible() {
   echo
 }
 
+install_local_inventory() {
+  cat > /etc/ansible/hosts << EOF
+[localhost]
+localhost ansible_connection=local
+
+EOF
+}
+
+install_ansible_cfg() {
+  cat > /etc/ansible/ansible.cfg << EOF
+[defaults]
+
+hash_behaviour=$ANSIBLE_HASH_BEHAVIOUR
+
+EOF
+}
+
 #### Main
 
 SUDO_CMD=
@@ -142,6 +159,7 @@ ANSIBLE_VERSION=${ANSIBLE_VERSION-2.2.0.0}
 ANSIBLE_VENV_DIR=${ANSIBLE_VENV_DIR-/etc/ansible/venv}
 VENV_ACTIVATE_CMD="$ANSIBLE_VENV_DIR/bin/activate"
 ANSIBLE_CMD="$ANSIBLE_VENV_DIR/bin/ansible"
+ANSIBLE_HASH_BEHAVIOUR=${ANSIBLE_HASH_BEHAVIOUR-merge}
 
 echo "* vars:"
 echo "  ANSIBLE_VERSION=$ANSIBLE_VERSION"
@@ -150,8 +168,8 @@ echo "  VENV_ACTIVATE_CMD=$VENV_ACTIVATE_CMD"
 echo "  ANSIBLE_CMD=$ANSIBLE_CMD"
 echo "  SUDO_CMD=$SUDO_CMD"
 echo
-echo "* creating directory /etc/ansible"
-mkdir -p /etc/ansible
+echo "* creating directory /etc/ansible/{roles,playbooks,vault,vars,facts.d}"
+mkdir -p /etc/ansible/{roles,playbooks,vault,vars,facts.d}
 echo "  done."
 echo
 
@@ -164,6 +182,8 @@ install_setuptools
 extra_pip_packages
 install_jinja2
 install_ansible $ANSIBLE_VERSION
+install_local_inventory
+install_ansible_cfg
 
 echo "* installed ansible v$ANSIBLE_VERSION successfully"
 echo "  done."
